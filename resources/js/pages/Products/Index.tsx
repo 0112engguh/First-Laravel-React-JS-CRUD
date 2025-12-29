@@ -32,6 +32,7 @@ interface Product {
     id: number,
     name: string,
     price: number,
+    image?: string,
     description: string,
 }
 
@@ -71,6 +72,7 @@ export default function Index() {
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="w-[100px]">ID</TableHead>
+                                <TableHead>Image</TableHead>
                                 <TableHead>Name</TableHead>
                                 <TableHead>Price</TableHead>
                                 <TableHead>Description</TableHead>
@@ -78,19 +80,55 @@ export default function Index() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {products.map((product)=>(
-                                <TableRow>
-                                    <TableCell className="font-medium">{product.id}</TableCell>
+                            {products.map((product) => (
+                                <TableRow key={product.id}>
+                                    <TableCell className="font-medium">
+                                        {product.id}
+                                    </TableCell>
+
+                                    <TableCell>
+                                        {product.image ? (
+                                            <img
+                                                src={`/storage/${product.image}`}
+                                                alt={product.name}
+                                                className="w-16 h-16 object-cover rounded"
+                                            />
+                                        ) : (
+                                            <span className="text-gray-400 text-sm">
+                                                No image
+                                            </span>
+                                        )}
+                                    </TableCell>
+
                                     <TableCell>{product.name}</TableCell>
-                                    <TableCell>{product.price}</TableCell>
+
+                                    <TableCell>
+                                        Rp. {product.price.toLocaleString("id-ID")}
+                                    </TableCell>
+
                                     <TableCell>{product.description}</TableCell>
+
                                     <TableCell className="text-center space-x-2">
-                                        <Link href={`/products/${product.id}/edit`}><Button className='bg-slate-600 hover:bg-slate-700'>Edit</Button></Link>
-                                        <Button disabled={processing} onClick={() => handleDelete(product.id, product.name)} className='bg-red-500 hover:bg-red-700'>Delete</Button>
+                                        <Link href={`/products/${product.id}/edit`}>
+                                            <Button className="bg-slate-600 hover:bg-slate-700">
+                                                Edit
+                                            </Button>
+                                        </Link>
+
+                                        <Button
+                                            disabled={processing}
+                                            onClick={() =>
+                                                handleDelete(product.id, product.name)
+                                            }
+                                            className="bg-red-500 hover:bg-red-700"
+                                        >
+                                            Delete
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
+
                     </Table>
                 </div>
             )}

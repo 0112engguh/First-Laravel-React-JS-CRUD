@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
@@ -11,17 +12,20 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
+Route::get('/', [LandingController::class, 'index'])->name('home');
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN ONLY DASHBOARD
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified', 'admin'])->group(function () {
+
+    Route::get('/dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
-    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+    Route::resource('products', ProductController::class);
 });
 
 require __DIR__.'/settings.php';

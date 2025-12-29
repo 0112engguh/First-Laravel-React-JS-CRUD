@@ -21,7 +21,8 @@ export default function Index() {
     const {data, setData, post, processing, errors} = useForm({
       name: '',
       price: '',
-      description: ''
+      description: '',
+      image: null as File | null,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -54,6 +55,10 @@ export default function Index() {
                 <div className="gap-1.5">
                   <Label htmlFor="price product">Price</Label>
                   <Input placeholder="Price" value={data.price} onChange={(e) => setData('price', e.target.value)}></Input>
+                </div>
+                <div className="gap-1.5">
+                  <Label htmlFor="image">Jersey Image</Label>
+                  <Input type="file" accept="image/*" onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)}></Input>
                 </div>
                 <div className="gap-1.5">
                   <Label htmlFor="description product">Description</Label>

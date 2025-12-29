@@ -1,7 +1,7 @@
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import { send } from '@/routes/verification';
 import { type BreadcrumbItem, type SharedData } from '@/types';
-import { Transition } from '@headlessui/react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Form, Head, Link, usePage } from '@inertiajs/react';
 
 import DeleteUser from '@/components/delete-user';
@@ -43,9 +43,7 @@ export default function Profile({
 
                     <Form
                         {...ProfileController.update.form()}
-                        options={{
-                            preserveScroll: true,
-                        }}
+                        options={{ preserveScroll: true }}
                         className="space-y-6"
                     >
                         {({ processing, recentlySuccessful, errors }) => (
@@ -98,7 +96,7 @@ export default function Profile({
                                                 <Link
                                                     href={send()}
                                                     as="button"
-                                                    className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                                                    className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current dark:decoration-neutral-500"
                                                 >
                                                     Click here to resend the
                                                     verification email.
@@ -124,17 +122,23 @@ export default function Profile({
                                         Save
                                     </Button>
 
-                                    <Transition
-                                        show={recentlySuccessful}
-                                        enter="transition ease-in-out"
-                                        enterFrom="opacity-0"
-                                        leave="transition ease-in-out"
-                                        leaveTo="opacity-0"
-                                    >
-                                        <p className="text-sm text-neutral-600">
-                                            Saved
-                                        </p>
-                                    </Transition>
+                                    {/* REPLACEMENT FOR Transition */}
+                                    <AnimatePresence>
+                                        {recentlySuccessful && (
+                                            <motion.p
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                exit={{ opacity: 0 }}
+                                                transition={{
+                                                    duration: 0.2,
+                                                    ease: 'easeInOut',
+                                                }}
+                                                className="text-sm text-neutral-600"
+                                            >
+                                                Saved
+                                            </motion.p>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                             </>
                         )}
